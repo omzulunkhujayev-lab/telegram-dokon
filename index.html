@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Do'kon</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Telegramning o'z ranglarini ishlatamiz */
+        body {
+            font-family: sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 15px;
+            margin: 0;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .product-card {
+            background-color: var(--tg-theme-secondary-bg-color, #f4f4f5);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .price {
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        button:active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>🛍 Bizning Tovarlar</h2>
+
+    <div class="product-list">
+        <div class="product-card">
+            <h3>Acer Aspire 3 (DDR5 RAM)</h3>
+            <div class="price">4 500 000 so'm</div>
+            <button onclick="addToCart('Acer Aspire 3', 4500000)">Savatga qo'shish</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Intel Core i7 Protsessor</h3>
+            <div class="price">3 200 000 so'm</div>
+            <button onclick="addToCart('Intel Core i7', 3200000)">Savatga qo'shish</button>
+        </div>
+
+        <div class="product-card">
+            <h3>Nvidia RTX 4060</h3>
+            <div class="price">4 800 000 so'm</div>
+            <button onclick="addToCart('Nvidia RTX 4060', 4800000)">Savatga qo'shish</button>
+        </div>
+    </div>
+
+    <script>
+        // Telegram Web App obyektini chaqiramiz
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Saytni to'liq ekranga ochish
+
+        let cart = []; // Savatimiz
+        let totalPrice = 0;
+
+        // Xarid qilish tugmasini tayyorlab qo'yamiz (lekin hozircha yashirin)
+        tg.MainButton.textColor = '#ffffff';
+        tg.MainButton.color = '#2ecc71';
+
+        function addToCart(productName, price) {
+            cart.push({ name: productName, price: price });
+            totalPrice += price;
+
+            // Telegramdagi pastki yashil tugmani ko'rsatamiz
+            tg.MainButton.setText(`To'lovga o'tish (${totalPrice.toLocaleString()} so'm)`);
+            tg.MainButton.show();
+        }
+
+        // Foydalanuvchi "To'lovga o'tish" tugmasini bossa nima bo'ladi?
+        Telegram.WebApp.onEvent('mainButtonClicked', function () {
+            // Savatdagi ma'lumotlarni matn qilib botga qaytarib yuboramiz
+            let data = JSON.stringify(cart);
+            tg.sendData(data);
+        });
+    </script>
+</body>
+
+</html>
