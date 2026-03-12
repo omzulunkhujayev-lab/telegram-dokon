@@ -9,11 +9,10 @@
     <style>
         :root {
             --main-color: #ff4757;
-            /* Happy Home uchun yorqin rang */
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: sans-serif;
             background-color: var(--tg-theme-bg-color, #f9f9f9);
             color: var(--tg-theme-text-color, #2f3542);
             padding: 10px;
@@ -23,16 +22,13 @@
         h2 {
             text-align: center;
             color: var(--main-color);
-            margin-top: 10px;
         }
 
         .product-list {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            /* Ikki ustunli vitrina */
             gap: 10px;
             padding-bottom: 80px;
-            /* Tugma uchun joy */
         }
 
         .product-card {
@@ -41,22 +37,11 @@
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .product-card h3 {
-            font-size: 14px;
-            margin: 10px 0 5px 0;
-            height: 40px;
-            overflow: hidden;
         }
 
         .price {
             color: #2ed573;
             font-weight: bold;
-            font-size: 16px;
             margin-bottom: 10px;
         }
 
@@ -66,15 +51,9 @@
             border: none;
             padding: 8px;
             border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
+            width: 100%;
             font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:active {
-            transform: scale(0.95);
-            opacity: 0.8;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -111,19 +90,19 @@
         <div class="product-card">
             <h3>🧸 Yumshoq ayiqcha</h3>
             <div class="price">95 000 so'm</div>
-            <button onclick="addToCart('🧸 Yumshoq ayiqcha', 95000)">Savatga qo'shish</button>
+            <button onclick="addToCart(`🧸 Yumshoq ayiqcha`, 95000)">Savatga qo'shish</button>
         </div>
 
         <div class="product-card">
             <h3>💄 Lab bo'yog'i</h3>
             <div class="price">65 000 so'm</div>
-            <button onclick="addToCart('💄 Lab bo'yog'i', 65000)">Savatga qo'shish</button>
+            <button onclick="addToCart(`💄 Lab bo'yog'i`, 65000)">Savatga qo'shish</button>
         </div>
 
         <div class="product-card">
             <h3>💍 Bujiteriya to'plami</h3>
             <div class="price">150 000 so'm</div>
-            <button onclick="addToCart('💍 Bujiteriya to'plami', 150000)">Savatga qo'shish</button>
+            <button onclick="addToCart('💍 Bujiteriya to\'plami', 150000)">Savatga qo'shish</button>
         </div>
 
         <div class="product-card">
@@ -146,14 +125,12 @@
         function addToCart(productName, price) {
             cart.push({ name: productName, price: price });
             totalPrice += price;
-
             tg.MainButton.setText(`To'lovga o'tish (${totalPrice.toLocaleString()} so'm)`);
             tg.MainButton.show();
         }
 
         Telegram.WebApp.onEvent('mainButtonClicked', function () {
-            let data = JSON.stringify(cart);
-            tg.sendData(data);
+            tg.sendData(JSON.stringify(cart));
         });
     </script>
 </body>
