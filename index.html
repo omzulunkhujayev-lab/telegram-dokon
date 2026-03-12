@@ -4,60 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Do'kon</title>
+    <title>Happy Home - Onlayn Do'kon</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Telegramning o'z ranglarini ishlatamiz */
+        :root {
+            --main-color: #ff4757;
+            /* Happy Home uchun yorqin rang */
+        }
+
         body {
-            font-family: sans-serif;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--tg-theme-bg-color, #f9f9f9);
+            color: var(--tg-theme-text-color, #2f3542);
+            padding: 10px;
             margin: 0;
         }
 
         h2 {
             text-align: center;
+            color: var(--main-color);
+            margin-top: 10px;
         }
 
         .product-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* Ikki ustunli vitrina */
+            gap: 10px;
+            padding-bottom: 80px;
+            /* Tugma uchun joy */
         }
 
         .product-card {
-            background-color: var(--tg-theme-secondary-bg-color, #f4f4f5);
-            padding: 15px;
-            border-radius: 10px;
+            background-color: var(--tg-theme-secondary-bg-color, #ffffff);
+            padding: 10px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-card h3 {
-            margin: 0 0 10px 0;
+            font-size: 14px;
+            margin: 10px 0 5px 0;
+            height: 40px;
+            overflow: hidden;
         }
 
         .price {
-            color: #2ecc71;
+            color: #2ed573;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 10px;
         }
 
         button {
-            background-color: var(--tg-theme-button-color, #3390ec);
-            color: var(--tg-theme-button-text-color, #ffffff);
+            background-color: var(--main-color);
+            color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
             cursor: pointer;
-            width: 100%;
             font-weight: bold;
+            transition: 0.3s;
         }
 
         button:active {
+            transform: scale(0.95);
             opacity: 0.8;
         }
     </style>
@@ -65,57 +81,77 @@
 
 <body>
 
-    <h2>🛍 Bizning Tovarlar</h2>
+    <h2>🏠 Happy Home Do'koni</h2>
 
     <div class="product-list">
         <div class="product-card">
-            <h3>Acer Aspire 3 (DDR5 RAM)</h3>
-            <div class="price">4 500 000 so'm</div>
-            <button onclick="addToCart('Acer Aspire 3', 4500000)">Savatga qo'shish</button>
+            <h3>👗 Nafis libos</h3>
+            <div class="price">250 000 so'm</div>
+            <button onclick="addToCart('👗 Nafis libos', 250000)">Savatga qo'shish</button>
         </div>
 
         <div class="product-card">
-            <h3>Intel Core i7 Protsessor</h3>
-            <div class="price">3 200 000 so'm</div>
-            <button onclick="addToCart('Intel Core i7', 3200000)">Savatga qo'shish</button>
+            <h3>👒 Bahorgi shlyapa</h3>
+            <div class="price">85 000 so'm</div>
+            <button onclick="addToCart('👒 Bahorgi shlyapa', 85000)">Savatga qo'shish</button>
         </div>
 
         <div class="product-card">
-            <h3>Nvidia RTX 4060</h3>
-            <div class="price">4 800 000 so'm</div>
-            <button onclick="addToCart('Nvidia RTX 4060', 4800000)">Savatga qo'shish</button>
+            <h3>👠 Elegant tufli</h3>
+            <div class="price">320 000 so'm</div>
+            <button onclick="addToCart('👠 Elegant tufli', 320000)">Savatga qo'shish</button>
         </div>
+
         <div class="product-card">
-            <h3>Mac book air 2</h3>
-            <div class="price">11 000 000 so'm</div>
-            <button onclick="addToCart('Mac book air 2', 11000000)">Savatga qo'shish</button>
+            <h3>👶 Bolalar kombinezoni</h3>
+            <div class="price">120 000 so'm</div>
+            <button onclick="addToCart('👶 Bolalar kombinezoni', 120000)">Savatga qo'shish</button>
+        </div>
+
+        <div class="product-card">
+            <h3>🧸 Yumshoq ayiqcha</h3>
+            <div class="price">95 000 so'm</div>
+            <button onclick="addToCart('🧸 Yumshoq ayiqcha', 95000)">Savatga qo'shish</button>
+        </div>
+
+        <div class="product-card">
+            <h3>💄 Lab bo'yog'i</h3>
+            <div class="price">65 000 so'm</div>
+            <button onclick="addToCart('💄 Lab bo'yog'i', 65000)">Savatga qo'shish</button>
+        </div>
+
+        <div class="product-card">
+            <h3>💍 Bujiteriya to'plami</h3>
+            <div class="price">150 000 so'm</div>
+            <button onclick="addToCart('💍 Bujiteriya to'plami', 150000)">Savatga qo'shish</button>
+        </div>
+
+        <div class="product-card">
+            <h3>👜 Charm sumka</h3>
+            <div class="price">450 000 so'm</div>
+            <button onclick="addToCart('👜 Charm sumka', 450000)">Savatga qo'shish</button>
         </div>
     </div>
 
     <script>
-        // Telegram Web App obyektini chaqiramiz
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Saytni to'liq ekranga ochish
+        tg.expand();
 
-        let cart = []; // Savatimiz
+        let cart = [];
         let totalPrice = 0;
 
-        // Xarid qilish tugmasini tayyorlab qo'yamiz (lekin hozircha yashirin)
         tg.MainButton.textColor = '#ffffff';
-        tg.MainButton.color = '#2ecc71';
+        tg.MainButton.color = '#2ed573';
 
         function addToCart(productName, price) {
             cart.push({ name: productName, price: price });
             totalPrice += price;
 
-            // Telegramdagi pastki yashil tugmani ko'rsatamiz
             tg.MainButton.setText(`To'lovga o'tish (${totalPrice.toLocaleString()} so'm)`);
             tg.MainButton.show();
         }
 
-        // Foydalanuvchi "To'lovga o'tish" tugmasini bossa nima bo'ladi?
         Telegram.WebApp.onEvent('mainButtonClicked', function () {
-            // Savatdagi ma'lumotlarni matn qilib botga qaytarib yuboramiz
             let data = JSON.stringify(cart);
             tg.sendData(data);
         });
