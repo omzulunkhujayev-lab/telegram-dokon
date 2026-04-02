@@ -1,138 +1,636 @@
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Home - Onlayn Do'kon</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --main-color: #ff4757;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Home — Do'kon</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent:   #c8523a;
+      --accent2:  #e8a87c;
+      --bg:       var(--tg-theme-bg-color,       #faf7f4);
+      --card:     var(--tg-theme-secondary-bg-color, #ffffff);
+      --text:     var(--tg-theme-text-color,     #1a1a1a);
+      --muted:    #888;
+      --green:    #3da05a;
+      --radius:   16px;
+      --shadow:   0 4px 20px rgba(0,0,0,0.07);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: sans-serif;
-            background-color: var(--tg-theme-bg-color, #f9f9f9);
-            color: var(--tg-theme-text-color, #2f3542);
-            padding: 10px;
-            margin: 0;
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 90px;
+    }
 
-        h2 {
-            text-align: center;
-            color: var(--main-color);
-        }
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, var(--accent) 0%, #a03020 100%);
+      color: #fff;
+      padding: 18px 16px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(200,82,58,0.3);
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+    .logo span { opacity: 0.75; font-size: 14px; }
+    .cart-btn {
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s;
+    }
+    .cart-btn:hover { background: rgba(255,255,255,0.28); }
+    #cart-count {
+      background: #fff;
+      color: var(--accent);
+      border-radius: 50%;
+      width: 20px; height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
 
-        .product-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding-bottom: 80px;
-        }
+    /* ── CATEGORY TABS ── */
+    .cats {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 2px;
+      scrollbar-width: none;
+    }
+    .cats::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.18);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.85);
+      padding: 6px 13px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .cat-tab.active, .cat-tab:hover {
+      background: #fff;
+      color: var(--accent);
+      border-color: #fff;
+    }
 
-        .product-card {
-            background-color: var(--tg-theme-secondary-bg-color, #ffffff);
-            padding: 10px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      padding: 18px 16px 4px;
+      color: var(--text);
+    }
+    .section-sub {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 0 16px 14px;
+    }
 
-        .price {
-            color: #2ed573;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 12px;
+    }
 
-        button {
-            background-color: var(--main-color);
-            color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 8px;
-            width: 100%;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .card:active { transform: scale(0.97); }
+
+    .card-badge {
+      position: absolute;
+      top: 8px; left: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      background: linear-gradient(135deg, #fdf0ed, #fce8d8);
+      position: relative;
+    }
+
+    .card-body {
+      padding: 10px 10px 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .card-name {
+      font-weight: 600;
+      font-size: 13.5px;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.4;
+      flex: 1;
+    }
+    .card-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      color: var(--green);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .add-btn {
+      margin-top: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 9px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .add-btn:hover { background: #b04030; }
+    .add-btn:active { transform: scale(0.96); }
+    .add-btn.added {
+      background: var(--green);
+    }
+
+    /* ── CART MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      backdrop-filter: blur(3px);
+    }
+    .modal-overlay.open { display: flex; align-items: flex-end; }
+
+    .modal {
+      background: var(--card);
+      width: 100%;
+      border-radius: 24px 24px 0 0;
+      padding: 20px 16px 30px;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+    }
+    .modal-close {
+      background: #f0eeec;
+      border: none;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0eeec;
+    }
+    .cart-item-emoji { font-size: 28px; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 14px; font-weight: 600; }
+    .cart-item-price { font-size: 13px; color: var(--green); font-weight: 500; }
+    .cart-item-remove {
+      background: #fef0ee;
+      border: none;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0 6px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .cart-total-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--green);
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #b04030);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 14px rgba(200,82,58,0.35);
+    }
+
+    /* ── FLOATING CART ── */
+    .fab {
+      position: fixed;
+      bottom: 18px;
+      right: 16px;
+      background: linear-gradient(135deg, var(--accent), #b04030);
+      color: #fff;
+      border: none;
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(200,82,58,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+    }
+    .fab.visible { display: flex; }
+    .fab-badge {
+      position: absolute;
+      top: -4px; right: -4px;
+      background: #fff;
+      color: var(--accent);
+      border-radius: 50%;
+      width: 22px; height: 22px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--accent);
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 300;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
 </head>
-
 <body>
 
-    <h2>🏠 Happy Home Do'koni</h2>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo">🏠 Happy Home <span>do'koni</span></div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Savat <span id="cart-count">0</span>
+    </button>
+  </div>
+  <div class="cats" id="cats"></div>
+</div>
 
-    <div class="product-list">
-        <div class="product-card">
-            <h3>👗 Nafis libos</h3>
-            <div class="price">250 000 so'm</div>
-            <button onclick="addToCart('👗 Nafis libos', 250000)">Savatga qo'shish</button>
-        </div>
+<!-- PRODUCTS -->
+<div id="section-title" class="section-title"></div>
+<div id="section-sub" class="section-sub"></div>
+<div class="product-grid" id="product-grid"></div>
 
-        <div class="product-card">
-            <h3>👒 Bahorgi shlyapa</h3>
-            <div class="price">85 000 so'm</div>
-            <button onclick="addToCart('👒 Bahorgi shlyapa', 85000)">Savatga qo'shish</button>
-        </div>
+<!-- FAB -->
+<button class="fab" id="fab" onclick="openCart()">
+  🛒
+  <div class="fab-badge" id="fab-badge">0</div>
+</button>
 
-        <div class="product-card">
-            <h3>👠 Elegant tufli</h3>
-            <div class="price">320 000 so'm</div>
-            <button onclick="addToCart('👠 Elegant tufli', 320000)">Savatga qo'shish</button>
-        </div>
-
-        <div class="product-card">
-            <h3>👶 Bolalar kombinezoni</h3>
-            <div class="price">120 000 so'm</div>
-            <button onclick="addToCart('👶 Bolalar kombinezoni', 120000)">Savatga qo'shish</button>
-        </div>
-
-        <div class="product-card">
-            <h3>🧸 Yumshoq ayiqcha</h3>
-            <div class="price">95 000 so'm</div>
-            <button onclick="addToCart(`🧸 Yumshoq ayiqcha`, 95000)">Savatga qo'shish</button>
-        </div>
-
-        <div class="product-card">
-            <h3>💄 Lab bo'yog'i</h3>
-            <div class="price">65 000 so'm</div>
-            <button onclick="addToCart(`💄 Lab bo'yog'i`, 65000)">Savatga qo'shish</button>
-        </div>
-
-        <div class="product-card">
-            <h3>💍 Bujiteriya to'plami</h3>
-            <div class="price">150 000 so'm</div>
-            <button onclick="addToCart('💍 Bujiteriya to\'plami', 150000)">Savatga qo'shish</button>
-        </div>
-
-        <div class="product-card">
-            <h3>👜 Charm sumka</h3>
-            <div class="price">450 000 so'm</div>
-            <button onclick="addToCart('👜 Charm sumka', 450000)">Savatga qo'shish</button>
-        </div>
+<!-- CART MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeCart(event)">
+  <div class="modal" id="cart-modal">
+    <div class="modal-header">
+      <div class="modal-title">🛒 Savatingiz</div>
+      <button class="modal-close" onclick="closeCartBtn()">✕</button>
     </div>
+    <div id="cart-content"></div>
+  </div>
+</div>
 
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-        let cart = [];
-        let totalPrice = 0;
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+  tg.MainButton.setParams({ color: '#c8523a', text_color: '#ffffff' });
 
-        tg.MainButton.textColor = '#ffffff';
-        tg.MainButton.color = '#2ed573';
+  // ── CATALOG DATA ──
+  const CATEGORIES = [
+    { key: 'all',      label: '✨ Barchasi' },
+    { key: 'erkaklar', label: '👔 Erkaklar' },
+    { key: 'ayollar',  label: '👗 Ayollar' },
+    { key: 'bolalar',  label: '👶 Bolalar' },
+    { key: 'oyinchoq', label: '🧸 O\'yinchoq' },
+    { key: 'kosmetika',label: '💄 Kosmetika' },
+    { key: 'sumka',    label: '👜 Aksessuarlar' },
+    { key: 'poyabzal', label: '👠 Poyabzal' },
+    { key: 'sport',    label: '🏋️ Sport' },
+  ];
 
-        function addToCart(productName, price) {
-            cart.push({ name: productName, price: price });
-            totalPrice += price;
-            tg.MainButton.setText(`To'lovga o'tish (${totalPrice.toLocaleString()} so'm)`);
-            tg.MainButton.show();
-        }
+  const PRODUCTS = [
+    { id:1,  name:"Klassik ko'ylak",     desc:"Biznes uslubidagi, sifatli mato",            price:280000, cat:"erkaklar", emoji:"👔", new:true },
+    { id:2,  name:"Erkaklar kurtka",     desc:"Qishki issiq, suv o'tkazmaydigan kurtka",    price:650000, cat:"erkaklar", emoji:"🧥" },
+    { id:3,  name:"Erkaklar shim",       desc:"Klassik fit, to'q ko'k rangli джинси",        price:220000, cat:"erkaklar", emoji:"👖" },
+    { id:4,  name:"Jun sharf",           desc:"Yung'ichka, issiqlovchi sharf",               price:75000,  cat:"erkaklar", emoji:"🧣" },
+    { id:5,  name:"Nafis ko'ylak",       desc:"Kuzgi mavsum uchun zamonaviy ko'ylak",        price:250000, cat:"ayollar",  emoji:"👗", new:true },
+    { id:6,  name:"Bahorgi shlyapa",     desc:"Quyoshdan himoyalovchi bosh kiyim",           price:85000,  cat:"ayollar",  emoji:"👒" },
+    { id:7,  name:"Plisse yubka",        desc:"Midi uzunlikdagi zamonaviy yubka",            price:195000, cat:"ayollar",  emoji:"🥻" },
+    { id:8,  name:"Ayollar palto",       desc:"Beige rangli, klassik kesimli palto",         price:780000, cat:"ayollar",  emoji:"🧥", new:true },
+    { id:9,  name:"Kombinezoni 0-1 yosh",desc:"Paxtali, yumshoq bolalar kiyimi",            price:120000, cat:"bolalar",  emoji:"👶" },
+    { id:10, name:"Bolalar ko'ylagi",    desc:"2-5 yosh uchun, rang-barang",                 price:95000,  cat:"bolalar",  emoji:"🧒" },
+    { id:11, name:"Maktab formasi",      desc:"6-12 yosh uchun to'plamli forma",             price:350000, cat:"bolalar",  emoji:"🎒", new:true },
+    { id:12, name:"Qo'lqop + sharf set", desc:"Bolalar uchun issiq to'plam",                price:65000,  cat:"bolalar",  emoji:"🧤" },
+    { id:13, name:"Yumshoq ayiqcha",     desc:"Bolajonlar uchun xavfsiz o'yinchoq",         price:95000,  cat:"oyinchoq", emoji:"🧸" },
+    { id:14, name:"Mashina to'plami",    desc:"12 dona rangli mashinalar",                  price:135000, cat:"oyinchoq", emoji:"🚗" },
+    { id:15, name:"Intellektual o'yin",  desc:"4-8 yosh uchun rivojlantiruvchi o'yin",     price:110000, cat:"oyinchoq", emoji:"🎮", new:true },
+    { id:16, name:"Rasm to'plami",       desc:"Bo'yoq, qalam va albom to'plami",             price:55000,  cat:"oyinchoq", emoji:"🎨" },
+    { id:17, name:"Lab bo'yog'i",        desc:"Matoviy, uzoq saqlanuvchi lipstick",          price:65000,  cat:"kosmetika",emoji:"💄" },
+    { id:18, name:"Tirnoq bo'yog'i set", desc:"12 rangli to'plam",                          price:48000,  cat:"kosmetika",emoji:"💅" },
+    { id:19, name:"Tana kremi",          desc:"Namlovchi, tabiiy tarkibli krem",             price:85000,  cat:"kosmetika",emoji:"🧴", new:true },
+    { id:20, name:"Atir suvi",           desc:"Fransuz brendidan, 50ml",                    price:320000, cat:"kosmetika",emoji:"🌹" },
+    { id:21, name:"Charm sumka",         desc:"Haqiqiy charmdan, zamonaviy dizayn",         price:450000, cat:"sumka",    emoji:"👜", new:true },
+    { id:22, name:"Bujiteriya to'plami", desc:"Tilla rangli zirak va uzuklar",              price:150000, cat:"sumka",    emoji:"💍" },
+    { id:23, name:"Quyosh ko'zoynagi",   desc:"UV himoyali, sifatli linzalar",              price:125000, cat:"sumka",    emoji:"🕶️" },
+    { id:24, name:"Analog soat",         desc:"Klassik soat, charm tasma",                  price:380000, cat:"sumka",    emoji:"⌚" },
+    { id:25, name:"Elegant tufli",       desc:"Bayramona va kundalik qulay tufli",           price:320000, cat:"poyabzal", emoji:"👠" },
+    { id:26, name:"Sport krossovka",     desc:"Yengil, nafas oluvchi material",             price:285000, cat:"poyabzal", emoji:"👟", new:true },
+    { id:27, name:"Erkaklar tufli",      desc:"Klassik charm tufli, biznes uslub",          price:420000, cat:"poyabzal", emoji:"👞" },
+    { id:28, name:"Trekking botinkasi",  desc:"Tog' va sayohat uchun kuchli botinka",       price:550000, cat:"poyabzal", emoji:"🥾" },
+    { id:29, name:"Sport kostyum",       desc:"Elastik, nafas oluvchi sport to'plam",       price:195000, cat:"sport",    emoji:"🏋️", new:true },
+    { id:30, name:"Yoga matcha",         desc:"Ekologik, qalinligi 6mm",                    price:145000, cat:"sport",    emoji:"🧘" },
+    { id:31, name:"Sport futbolka",      desc:"Tez quriydigan, mesh material",              price:85000,  cat:"sport",    emoji:"🎽" },
+    { id:32, name:"Yugurish shorty",     desc:"Engil, havoli, yon cho'ntakli",              price:75000,  cat:"sport",    emoji:"🏃" },
+  ];
 
-        Telegram.WebApp.onEvent('mainButtonClicked', function () {
-            tg.sendData(JSON.stringify(cart));
-        });
-    </script>
+  let cart = [];
+  let activeCategory = 'all';
+
+  // ── BUILD TABS ──
+  const catsEl = document.getElementById('cats');
+  CATEGORIES.forEach(cat => {
+    const tab = document.createElement('button');
+    tab.className = 'cat-tab' + (cat.key === 'all' ? ' active' : '');
+    tab.textContent = cat.label;
+    tab.onclick = () => switchCategory(cat.key);
+    tab.dataset.key = cat.key;
+    catsEl.appendChild(tab);
+  });
+
+  function switchCategory(key) {
+    activeCategory = key;
+    document.querySelectorAll('.cat-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.key === key);
+    });
+    renderProducts();
+  }
+
+  function renderProducts() {
+    const filtered = activeCategory === 'all'
+      ? PRODUCTS
+      : PRODUCTS.filter(p => p.cat === activeCategory);
+
+    const cat = CATEGORIES.find(c => c.key === activeCategory);
+    document.getElementById('section-title').textContent = cat.label;
+    document.getElementById('section-sub').textContent =
+      filtered.length + ' ta mahsulot';
+
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = '';
+
+    filtered.forEach(p => {
+      const inCart = cart.some(c => c.id === p.id);
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        ${p.new ? '<div class="card-badge">Yangi</div>' : ''}
+        <div class="card-img">${p.emoji}</div>
+        <div class="card-body">
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.desc}</div>
+          <div class="card-price">${p.price.toLocaleString()} so'm</div>
+          <button class="add-btn ${inCart ? 'added' : ''}"
+            id="btn-${p.id}"
+            onclick="addToCart(${p.id})">
+            ${inCart ? '✓ Qo\'shildi' : '+ Savatga'}
+          </button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function addToCart(id) {
+    const product = PRODUCTS.find(p => p.id === id);
+    if (!product) return;
+
+    const existing = cart.find(c => c.id === id);
+    if (existing) {
+      existing.qty = (existing.qty || 1) + 1;
+    } else {
+      cart.push({ ...product, qty: 1 });
+    }
+
+    const btn = document.getElementById('btn-' + id);
+    if (btn) {
+      btn.textContent = "✓ Qo'shildi";
+      btn.classList.add('added');
+    }
+
+    updateCartUI();
+    showToast(`${product.emoji} ${product.name} savatga qo'shildi!`);
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(c => c.id !== id);
+    updateCartUI();
+    renderCartContent();
+    renderProducts();
+  }
+
+  function updateCartUI() {
+    const count = cart.reduce((s, c) => s + (c.qty || 1), 0);
+    document.getElementById('cart-count').textContent = count;
+    document.getElementById('fab-badge').textContent = count;
+
+    const fab = document.getElementById('fab');
+    fab.classList.toggle('visible', count > 0);
+
+    if (count > 0) {
+      const total = cart.reduce((s, c) => s + c.price * (c.qty || 1), 0);
+      tg.MainButton.setText(`✅ Buyurtma berish — ${total.toLocaleString()} so'm`);
+      tg.MainButton.show();
+    } else {
+      tg.MainButton.hide();
+    }
+  }
+
+  function openCart() {
+    renderCartContent();
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeCart(e) {
+    if (e.target === document.getElementById('modal-overlay')) {
+      document.getElementById('modal-overlay').classList.remove('open');
+    }
+  }
+  function closeCartBtn() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  function renderCartContent() {
+    const el = document.getElementById('cart-content');
+    if (cart.length === 0) {
+      el.innerHTML = '<div class="cart-empty">🛒 Savatingiz bo\'sh<br>Mahsulot qo\'shing!</div>';
+      return;
+    }
+    let html = '';
+    let total = 0;
+    cart.forEach(item => {
+      const subtotal = item.price * (item.qty || 1);
+      total += subtotal;
+      html += `
+        <div class="cart-item">
+          <div class="cart-item-emoji">${item.emoji}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${subtotal.toLocaleString()} so'm${item.qty > 1 ? ' (' + item.qty + ' ta)' : ''}</div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button>
+        </div>
+      `;
+    });
+    html += `
+      <div class="cart-total">
+        <span>💰 Jami:</span>
+        <span class="cart-total-price">${total.toLocaleString()} so'm</span>
+      </div>
+      <button class="checkout-btn" onclick="sendOrder()">
+        🛒 Buyurtma berish
+      </button>
+    `;
+    el.innerHTML = html;
+  }
+
+  function sendOrder() {
+    if (cart.length === 0) return;
+    const payload = cart.map(c => ({ name: c.name, price: c.price * (c.qty || 1), qty: c.qty || 1 }));
+    tg.sendData(JSON.stringify(payload));
+  }
+
+  tg.MainButton.onClick(sendOrder);
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // ── INIT ──
+  renderProducts();
+</script>
 </body>
-
 </html>
