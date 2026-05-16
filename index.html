@@ -467,8 +467,9 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        const isTelegram = !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData);
-        const tg = isTelegram ? window.Telegram.WebApp : null;
+        // initData ba'zan bo'sh bo'ladi — faqat WebApp ob'ekti borligini tekshiramiz
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+        const isTelegram = !!(tg && tg.sendData);
         if (tg) {
             tg.expand();
             // setParams eski versiyalarda yo'q — xavfsiz usul bilan o'rnatamiz
